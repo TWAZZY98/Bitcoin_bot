@@ -10,12 +10,14 @@ def get_connected():
     con.execute("PRAGMA journal_mode=WAL")
     return con
 
-def init_db():
+# This function creates table to store candle data with a chosen name
+# doesnt do anything if the table already exists
+def create_candle_table(name:str):
     con = get_connected()
     cur = con.cursor()
     
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS btc_candle (
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS {name}_candle (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         symbol TEXT,
         open_time INTEGER,
@@ -27,8 +29,16 @@ def init_db():
     )                   
     """)
     
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS btc_ticker (
+    con.commit()
+    con.close()
+# creates a table for a ticker with a chosen name
+# doesnt do anything if table already exists
+def create_ticker_table(name:str):
+    con = get_connected()
+    cur = con.cursor()
+
+    cur.execute(f"""
+    CREATE TABLE IF NOT EXISTS {name}_ticker (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         symbol TEXT,
         price FLOAT
@@ -37,3 +47,8 @@ def init_db():
     
     con.commit()
     con.close()
+
+def init_db():
+    symbols = ["BTCUSD"]
+    for a in symbols:
+        create_ticker_table(a)
