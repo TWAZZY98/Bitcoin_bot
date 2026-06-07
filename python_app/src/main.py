@@ -1,6 +1,7 @@
 from binance.client import Client
 import os
 from database import db, repository
+import datastream
 
 
 
@@ -15,6 +16,8 @@ def main():
     price  = client.get_symbol_ticker(symbol="BTCUSDT")
     print(price)
     repository.insert_ticker(price['symbol'],price['price'])
+    d = datastream.Datastream()
+
 
 if __name__ == "__main__":
     main()

@@ -47,8 +47,13 @@ def create_ticker_table(name:str):
     
     con.commit()
     con.close()
+    
+# list of assests that have a initiated table
+# move to a json file later of use some way to make it easy to add or delete assets
+def get_assets() -> list:
+    return ["BTCUSDT"]
 
 def init_db():
-    symbols = ["BTCUSD"]
-    for a in symbols:
+    assets = get_assets()
+    for a in assets:
         create_ticker_table(a)
