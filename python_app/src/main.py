@@ -17,7 +17,7 @@ def main():
     print(price)
     repository.insert_ticker(price['symbol'],price['price'])
     d = datastream.Datastream()
-
+    d.run()
 
 if __name__ == "__main__":
     main()

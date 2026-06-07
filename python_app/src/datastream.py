@@ -1,10 +1,12 @@
 import json
 import websocket
-import pandas as pd
-from database import db
+from database import db, repository
+
+import messagehandler as mh
 
 class Datastream:
     def __init__(self):
+        self.massageHandler = mh.Parser()
         assets = db.get_assets()
 
         streams = [
@@ -26,8 +28,10 @@ class Datastream:
 
     def on_message(self, ws, message):
         data = json.loads(message)
+        parsed_data = self.massageHandler.parse(data)
+        repository.insert_candle(parsed_data)
+        print(parsed_data)
 
-        print(data)
 
     def run(self):
         self.ws.run_forever()

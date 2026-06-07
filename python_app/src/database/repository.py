@@ -15,4 +15,18 @@ def insert_ticker(symbol:str, price:float):
     con.commit()
     con.close()
 
-#def insert_candle():
+def insert_candle(input:dict):
+    con = db.get_connected()
+    cur = con.cursor()
+    print("[INFO Inserted candle]")
+    cur.execute(f"""
+        INSERT INTO {input['symbol']}_candle (
+            symbol, open_time, open, high, low, close, volume
+        )    
+    """,(input['symbol'],
+         input['open_time'],
+         input['open'],
+         input['high'],
+         input['low'],
+         input['close'],
+         input['volume']))

@@ -26,7 +26,7 @@ def create_candle_table(name:str):
         low REAL,
         close REAL,
         volume REAL
-    )                   
+    )                
     """)
     
     con.commit()
@@ -42,7 +42,7 @@ def create_ticker_table(name:str):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         symbol TEXT,
         price FLOAT
-    )                   
+    )
     """)
     
     con.commit()
@@ -57,3 +57,4 @@ def init_db():
     assets = get_assets()
     for a in assets:
         create_ticker_table(a)
+        create_candle_table(a)
