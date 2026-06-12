@@ -15,7 +15,7 @@ class Parser:
         volume = input['data']['k']['v']
         
         ret = {'symbol':symbol,
-               'open_time':open_time,
+               'open_time':open_time.isoformat(),
                'open':open,
                'high':high,
                'low':low,
@@ -23,5 +23,4 @@ class Parser:
                'volume':volume
             }
         self.numOfParsed = self.numOfParsed +1
-        print(self.numOfParsed)
         return ret

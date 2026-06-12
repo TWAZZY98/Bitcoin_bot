@@ -30,7 +30,6 @@ class Datastream:
         data = json.loads(message)
         parsed_data = self.massageHandler.parse(data)
         repository.insert_candle(parsed_data)
-        print(parsed_data)
 
 
     def run(self):

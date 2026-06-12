@@ -15,22 +15,26 @@ def get_connected():
 def create_candle_table(name:str):
     con = get_connected()
     cur = con.cursor()
-    
-    cur.execute(f"""
-    CREATE TABLE IF NOT EXISTS {name}_candle (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        symbol TEXT,
-        open_time INTEGER,
-        open REAL,
-        high REAL,
-        low REAL,
-        close REAL,
-        volume REAL
-    )                
-    """)
-    
-    con.commit()
-    con.close()
+    try:
+        print(f"[Info] Initiated {name}_candle table creation")
+        cur.execute(f"""
+        CREATE TABLE IF NOT EXISTS {name}_candle (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            symbol TEXT,
+            open_time INTEGER,
+            open REAL,
+            high REAL,
+            low REAL,
+            close REAL,
+            volume REAL
+        )                
+        """)
+        con.commit()
+        
+    except Exception as e:
+        print(f"[ERROR] {type(e).__name__}: {e}")
+    finally:
+        con.close()
 # creates a table for a ticker with a chosen name
 # doesnt do anything if table already exists
 def create_ticker_table(name:str):
