@@ -1,7 +1,7 @@
 from binance.client import Client
 import os
 from database import db, repository
-import datastream
+from stream import datastream
 
 
 

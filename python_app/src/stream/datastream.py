@@ -1,8 +1,7 @@
 import json
 import websocket
 from database import db, repository
-
-import messagehandler as mh
+from stream import messagehandler as mh
 
 class Datastream:
     def __init__(self):
@@ -28,7 +27,10 @@ class Datastream:
 
     def on_message(self, ws, message):
         data = json.loads(message)
+        #enters data into the message handler into the queue
         parsed_data = self.massageHandler.parse(data)
+        #candle_queue.put(parsed_data)
+        #implement lock free implementation with a queue later
         repository.insert_candle(parsed_data)
 
 

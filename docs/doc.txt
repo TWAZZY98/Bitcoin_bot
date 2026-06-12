@@ -1,0 +1,28 @@
+Structure:
+main:
+init the data base in db.py
+set api keys
+initaiate data steam
+run data steam
+    |
+    |
+    \/
+
+datastream:                                     Parse:
+create the url for the binance api      ---->   parese the data
+on each message get json of the data    <----   and return it
+    |
+    |
+    \/
+repository:
+insert data into the database
+    |
+    |
+    \/
+    SQLite database
+    |
+    |
+    \/
+    c++ engine
+
+

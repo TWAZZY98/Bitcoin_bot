@@ -4,6 +4,7 @@ class Parser:
     
     def __init__(self):
         self.numOfParsed =0
+        self.queue = []
     
     def parse(self,input:dict) -> dict:
         symbol = input['data']['s']
@@ -24,3 +25,4 @@ class Parser:
             }
         self.numOfParsed = self.numOfParsed +1
         return ret
+    
