@@ -1,0 +1,61 @@
+                         ┌────────────────────────────┐
+                         │        BINANCE API         │
+                         │  WebSocket + REST (data)   │
+                         └─────────────┬──────────────┘
+                                       │
+                                       ▼
+                ┌─────────────────────────────────────┐
+                │         PYTHON DATA ENGINE          │
+                │                                     │
+                │  - WebSocket receiver               │
+                │  - Candle builder (1m OHLCV)        │
+                │  - Data parser / cleaner            │
+                └─────────────┬───────────────────────┘
+                              │
+              ┌───────────────┴────────────────┐
+              ▼                                ▼
+┌──────────────────────────┐      ┌──────────────────────────┐
+│   THREAD / QUEUE LAYER   │      │      SQLITE DATABASE     │
+│                          │      │                          │
+│  candle_queue            │      │  candles table           │
+│  (buffer stream data)    │      │  history + persistence   │
+└──────────────┬───────────┘      └──────────────┬───────────┘
+               │                                 │
+               │                                 │ (historical data load)
+               ▼                                 ▼
+┌────────────────────────────────────────────────────────────┐
+│                 C++ TRADING ENGINE                         │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │              MARKET DATA HANDLER                     │  │
+│  │  - receives candles (live or DB load)                │  │
+│  │  - maintains in-memory deque (last N candles)        │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │              STRATEGY MANAGER                        │  │
+│  │  - capital allocation per strategy                   │  │
+│  │  - risk limits (loss, drawdown, exposure)            │  │
+│  │  - enable / disable strategies                       │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │                STRATEGIES                            │  │
+│  │  - EMA crossover                                     │  │
+│  │  - momentum                                          │  │
+│  │  - mean reversion                                    │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                                                            │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │             EXECUTION ENGINE                         │  │
+│  │  - order creation                                    │  │
+│  │  - position tracking                                 │  │
+│  │  - risk-adjusted sizing                              │  │
+│  └──────────────────────────────────────────────────────┘  │
+└──────────────────────────┬─────────────────────────────────┘
+                           │
+                           ▼
+                ┌────────────────────────────┐
+                │     ORDER OUTPUT LAYER     │
+                │  (Binance / Paper trading) │
+                └────────────────────────────┘
