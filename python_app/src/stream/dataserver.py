@@ -13,7 +13,7 @@ DISCONNECT_MESSAGE = "DISCONNECT"
 
 #"""
 #  add another thread that checks commands to accomodate disconnecting and reconnecting 
-# 
+#  
 # """
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -29,6 +29,7 @@ def start_transmission(conn):
                 conn.send(str(current).encode(FORMAT))
             except Exception as e:
                 print(f"[ERROR] server could not send a packet {type(e).__name__} {e}")
+                break
             previous_price = current
         time.sleep(0.1)
 
@@ -37,8 +38,11 @@ def handle_client(conn,addr):
     
     
     while True:
-        msg = conn.recv(HEADER).decode(FORMAT)
-
+        try:
+            msg = conn.recv(HEADER).decode(FORMAT)
+        except Exception as e:
+            print(f"[ERROR] server could not recieve a packet {type(e).__name__} {e}")
+            break
         if msg == DISCONNECT_MESSAGE:
             print("[INFO] Client disconnected")
             break
