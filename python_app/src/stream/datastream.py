@@ -1,7 +1,8 @@
 import json
 import websocket
 from database import db, repository
-from stream import messagehandler as mh
+from stream import messagehandler as mh, dataserver as ds
+from dataqueue import databuffer as dq
 
 class Datastream:
     def __init__(self):
@@ -32,6 +33,11 @@ class Datastream:
         #candle_queue.put(parsed_data)
         #implement lock free implementation with a queue later
         repository.insert_candle(parsed_data)
+        #send to queue
+        dq.latest_price = str(parsed_data.values()).strip("dict_values(['])")
+        print("[INFO] Data is transmited to the buffer")
+  
+        
 
 
     def run(self):

@@ -1,0 +1,6 @@
+connection
+
+server waits for "R"
+
+Then starts transmiting data from the queue
+(queue revieves data only when we have a connection)

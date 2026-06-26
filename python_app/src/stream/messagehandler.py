@@ -25,4 +25,3 @@ class Parser:
             }
         self.numOfParsed = self.numOfParsed +1
         return ret
-    
