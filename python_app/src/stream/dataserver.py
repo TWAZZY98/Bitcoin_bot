@@ -11,6 +11,11 @@ ADDR = (SERVER,PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISCONNECT"
 
+#"""
+#  add another thread that checks commands to accomodate disconnecting and reconnecting 
+# 
+# """
+
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
@@ -25,7 +30,7 @@ def start_transmission(conn):
             except Exception as e:
                 print(f"[ERROR] server could not send a packet {type(e).__name__} {e}")
             previous_price = current
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 def handle_client(conn,addr):
     print(f"[INFO] new connection at: {addr}")

@@ -24,6 +24,7 @@ def main():
     price  = client.get_symbol_ticker(symbol="BTCUSDT")
     print(price)
     repository.insert_ticker(price['symbol'],price['price'])
+    #two threads to run the server and stream
     t1 = threading.Thread(target=run_stream,args=())
     t2 = threading.Thread(target= run_server, args=())
     t2.start()

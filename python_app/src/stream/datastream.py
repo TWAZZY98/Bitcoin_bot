@@ -34,6 +34,7 @@ class Datastream:
         #implement lock free implementation with a queue later
         repository.insert_candle(parsed_data)
         #send to queue
+        # sends only the data seperated by a comma
         dq.latest_price = str(parsed_data.values()).strip("dict_values(['])")
         print("[INFO] Data is transmited to the buffer")
   
