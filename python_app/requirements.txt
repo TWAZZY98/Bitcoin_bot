@@ -1,5 +1,3 @@
 python-binance
-sqlite3
-json
 pandas
-websocket
+websocket-client
