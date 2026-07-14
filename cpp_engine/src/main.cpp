@@ -1,8 +1,10 @@
 #include <iostream>
 #include <print>
+#include <bits/stdc++.h>
 
 #include "include/pricebuffer.h"
 #include "include/dbhandler.h"
+#include "include/client.h"
 
 /*
 todo
@@ -18,20 +20,7 @@ using namespace std;
 int main(){
 
     PriceBuffer buffer;
-
-    DBHandler dbhandler;
-
-    dbhandler.get_data();
-
-    auto buf = buffer.get_buffer();
-    cout<<"[INFO] buffer test -> "<<buf<<"\n";
-
-    try{
-        buffer.write_to_buffer("New price");
-    }catch(int code){
-        print("Error when writing to buffer");
-    }
-    buf = buffer.get_buffer();
-    cout<<"[INFO] buffer test -> "<<buf<<"\n";
+    thread t(clientloop, std::ref(buffer));
+    t.join();
     return 0;
 }

@@ -35,7 +35,7 @@ class Datastream:
         repository.insert_candle(parsed_data)
         #send to queue
         # sends only the data seperated by a comma
-        dq.latest_price = str(parsed_data.values()).strip("dict_values(['])")
+        dq.latest_price = ",".join(str(v) for v in parsed_data.values())
         print("[INFO] Data is transmited to the buffer")
   
         

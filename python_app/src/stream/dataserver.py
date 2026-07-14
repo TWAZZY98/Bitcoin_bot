@@ -7,14 +7,15 @@ import time
 HEADER = 64
 PORT = 5050
 SERVER = socket.gethostbyname(socket.gethostname())
+print(f"[INFO] binding to {SERVER}:{PORT}")
 ADDR = (SERVER,PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "DISCONNECT"
 
-#"""
-#  add another thread that checks commands to accomodate disconnecting and reconnecting 
-#  
-# """
+"""
+add another thread that checks commands to accomodate disconnecting and reconnecting 
+ 
+"""
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
@@ -26,8 +27,8 @@ def start_transmission(conn):
         current = db.latest_price
         if current != previous_price:
             try:
-                conn.send(str(current).encode(FORMAT))
-                conn.send(str("n").encode(FORMAT))
+                conn.send(str(current+"\n").encode(FORMAT))
+
             except Exception as e:
                 print(f"[ERROR] server could not send a packet {type(e).__name__} {e}")
                 break
