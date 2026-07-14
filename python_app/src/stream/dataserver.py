@@ -27,6 +27,7 @@ def start_transmission(conn):
         if current != previous_price:
             try:
                 conn.send(str(current).encode(FORMAT))
+                conn.send(str("n").encode(FORMAT))
             except Exception as e:
                 print(f"[ERROR] server could not send a packet {type(e).__name__} {e}")
                 break

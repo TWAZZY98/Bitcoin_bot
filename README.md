@@ -5,5 +5,5 @@
 <p>source myfirstproject/bin/activate  </p>
 
 <p> sample compilation of the c++ code </p>
-g++ main.cpp client.cpp  -std=c++23
+g++ main.cpp pricebuffer.cpp dbhandler.cpp -l sqlite3 -std=c++23
 
