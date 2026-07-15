@@ -1,6 +1,0 @@
-#ifndef SIGNAL_GENERATOR
-#define SIGNAL_GENERATOR
-
-
-
-#endif
