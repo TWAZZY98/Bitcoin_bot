@@ -21,7 +21,7 @@ vector<string> splitCSV(const std::string& line)
     return fields;
 }
 
-Sygnal StansTestStrat::generate(const vector<string>& buffer)
+Sygnal StansTestStrat::generate(const deque<string>& buffer)
 {
 
     vector<float> close_data;

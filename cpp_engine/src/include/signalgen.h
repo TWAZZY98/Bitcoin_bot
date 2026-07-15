@@ -6,6 +6,7 @@
 #include <numeric>
 #include <sstream>
 #include <iostream>
+#include <deque>
 
 using namespace std;
 
@@ -27,7 +28,7 @@ class SignalGenerator{
     public:
     SignalGenerator() = default;
     virtual ~SignalGenerator() = default;
-    virtual Sygnal generate(const vector<string>& buffer) = 0;
+    virtual Sygnal generate(const deque<string>& buffer) = 0;
 
 };
 
@@ -35,7 +36,7 @@ class StansTestStrat : public SignalGenerator {
     public:
     StansTestStrat(int n = 3):detpth_(n){};
 
-    Sygnal generate(const vector<string>& buffer);
+    Sygnal generate(const deque<string>& buffer);
 
     private:
     int detpth_;

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <print>
 #include <bits/stdc++.h>
+#include <thread>
+#include <chrono>
 
 #include "include/pricebuffer.h"
 #include "include/dbhandler.h"
@@ -17,18 +19,30 @@ create an database reading class
 */
 using namespace std;
 
+
 void strategy_test(PriceBuffer& buffer){
-    int test_ammount{2};
+    uint64_t compare{0};
+    constexpr int test_ammount{2};
     StansTestStrat strategy(test_ammount);
     while (true) {
-        auto ticks = buffer.last_n(test_ammount);
+
+        auto snapshot = buffer.getSnapshot(test_ammount);
+
+        if(snapshot.id == compare){
+            this_thread::sleep_for(chrono::milliseconds(100));
+            continue;
+        }
+        compare = snapshot.id;
+        auto ticks = snapshot.data;
+
         Sygnal s = strategy.generate(ticks);
+
         if (s.state != SignalStates::HOLD) {
             cout<<"BUY"<<"\n";
         }else{
             cout<<"HOLD"<<"\n";
         }
-        this_thread::sleep_for(chrono::seconds(1));
+
     }
 
 }
