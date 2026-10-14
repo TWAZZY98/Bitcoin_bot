@@ -14,6 +14,7 @@ def run_server():
     dataserver.start()
 
 def main():
+    print("System Starting")
     db.init_db()
     
     client = Client(

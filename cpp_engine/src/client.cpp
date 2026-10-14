@@ -10,7 +10,8 @@ void clientloop(PriceBuffer& buffer){
     sockaddr_in serverAddress{};
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(PORT);
-    serverAddress.sin_addr.s_addr = inet_addr("172.20.10.13");
+    // FIX THIS
+    serverAddress.sin_addr.s_addr = inet_addr("172.17.16.1");
 
     if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         perror("connect failed");

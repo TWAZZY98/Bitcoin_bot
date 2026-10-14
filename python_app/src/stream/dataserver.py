@@ -6,7 +6,7 @@ import time
 
 HEADER = 64
 PORT = 5050
-SERVER = socket.gethostbyname(socket.gethostname())
+SERVER = "0.0.0.0"
 print(f"[INFO] binding to {SERVER}:{PORT}")
 ADDR = (SERVER,PORT)
 FORMAT = 'utf-8'
