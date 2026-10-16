@@ -3,7 +3,7 @@
 void PriceBuffer::write_to_buffer(string in){
     lock_guard<mutex> lock(m_);
     id_++;
-    if (buffer_.size() > CAPACITY) {
+    while (buffer_.size() >= CAPACITY) {
         buffer_.pop_front();
     }
     buffer_.push_back(std::move(in));

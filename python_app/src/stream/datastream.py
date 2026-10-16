@@ -10,7 +10,7 @@ class Datastream:
         assets = db.get_assets()
 
         streams = [
-            f"{asset.lower()}@kline_1m"
+            f"{asset.lower()}@kline_1s"
             for asset in assets
         ]
 
@@ -36,7 +36,7 @@ class Datastream:
         #send to queue
         # sends only the data seperated by a comma
         dq.latest_price = ",".join(str(v) for v in parsed_data.values())
-        print("[INFO] Data is transmited to the buffer")
+        #print("[INFO] Data is transmited to the buffer")
   
         
 

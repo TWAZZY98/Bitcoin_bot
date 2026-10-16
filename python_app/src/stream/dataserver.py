@@ -3,6 +3,7 @@ import socket
 from dataqueue import databuffer as db
 import threading
 import time
+import sys
 
 HEADER = 64
 PORT = 5050
@@ -31,9 +32,9 @@ def start_transmission(conn):
 
             except Exception as e:
                 print(f"[ERROR] server could not send a packet {type(e).__name__} {e}")
+                sys.exit()
                 break
             previous_price = current
-        time.sleep(0.1)
 
 def handle_client(conn,addr):
     print(f"[INFO] new connection at: {addr}")

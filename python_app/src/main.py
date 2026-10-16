@@ -2,6 +2,7 @@ from binance.client import Client
 import os
 from database import db, repository
 from stream import datastream, dataserver
+from broker import broker
 
 import threading
 
@@ -28,9 +29,11 @@ def main():
     #two threads to run the server and stream
     t1 = threading.Thread(target=run_stream,args=())
     t2 = threading.Thread(target= run_server, args=())
+    t3 = threading.Thread(target= broker.recieve_signal, args=())
     t2.start()
     t1.start()
-    
+    t3.start()
+    t3.join() 
 
 if __name__ == "__main__":
     main()
