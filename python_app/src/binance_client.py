@@ -13,7 +13,7 @@ class BinanceClient:
 
         
     def get_client(self):
-        print(self.client.get_account())
+        return self.client.get_account()
         
     def get_current_price(self, symbol):
         ticker = self.client.get_symbol_ticker(symbol= symbol)

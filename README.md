@@ -8,4 +8,7 @@
 g++ main.cpp client.cpp dbhandler.cpp pricebuffer.cpp signalgen.cpp -std=c++23 -pthread -lsqlite3 -o btc_engine
 <p> Enter linux terminal on Windows</p>
 wsl -d Ubuntu
-
+<p> To Do </p>
+add a buffer for c++ data to the python binance client
+make a strategy that does one position at a time
+and add sell all btc function to broker
