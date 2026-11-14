@@ -1,44 +1,44 @@
-from binance_client import BinanceClient
 import time
+from binance_client import BinanceClient
 
 B_C = BinanceClient()
 
-previous_btc = None
-previous_usdt = None
-previous_equity = None
+
+def get_total(account, asset):
+    """free + locked, 0.0 if the asset isn't listed."""
+    for b in account["balances"]:
+        if b["asset"] == asset:
+            return float(b["free"]) + float(b["locked"])
+    return 0.0
+
+
+prev = None  # (btc, usdt, equity)
 
 while True:
-    account = B_C.get_client()
+    try:
+        account = B_C.get_client()
+        price = float(B_C.get_current_price("BTCUSDT"))
+    except Exception as e:
+        print(f"[WARN] poll failed: {e}")
+        time.sleep(5)
+        continue
 
-    btc = next(b for b in account["balances"] if b["asset"] == "BTC")
-    usdt = next(b for b in account["balances"] if b["asset"] == "USDT")
+    btc = get_total(account, "BTC")
+    usdt = get_total(account, "USDT")
+    equity = usdt + btc * price
 
-    current_btc = float(btc["free"])
-    current_usdt = float(usdt["free"])
+    if prev is None:
+        print(f"Start: {btc:.8f} BTC | {usdt:.2f} USDT | equity {equity:.2f} USDT")
+    else:
+        p_btc, p_usdt, p_equity = prev
+        # Only report when balances change (a trade happened), not on price drift
+        if abs(btc - p_btc) > 1e-8 or abs(usdt - p_usdt) > 0.005:
+            if abs(btc - p_btc) > 1e-8:
+                print(f"BTC:  {btc:.8f} ({'UP' if btc > p_btc else 'DOWN'})")
+            if abs(usdt - p_usdt) > 0.005:
+                print(f"USDT: {usdt:.2f} ({'UP' if usdt > p_usdt else 'DOWN'})")
+            change = equity - p_equity
+            print(f"Equity: {equity:.2f} USDT ({change:+.2f})")
 
-    btc_price = float(B_C.get_current_price("BTCUSDT"))
-
-    # Total portfolio equity, valued in USDT
-    current_equity = current_usdt + (current_btc * btc_price)
-
-    if previous_btc is not None and current_btc != previous_btc:
-        direction = "UP" if current_btc > previous_btc else "DOWN"
-        print(f"BTC balance: {current_btc:.8f} ({direction})")
-
-    if previous_usdt is not None and current_usdt != previous_usdt:
-        direction = "UP" if current_usdt > previous_usdt else "DOWN"
-        print(f"USDT balance: {current_usdt:.2f} ({direction})")
-
-    if previous_equity is not None and current_equity != previous_equity:
-        direction = "UP" if current_equity > previous_equity else "DOWN"
-        change = current_equity - previous_equity
-        print(
-            f"Total equity: {current_equity:.2f} USDT "
-            f"({direction}, {change:+.2f} USDT)"
-        )
-
-    previous_btc = current_btc
-    previous_usdt = current_usdt
-    previous_equity = current_equity
-
-    time.sleep(5)
+    prev = (btc, usdt, equity)
+    time.sleep(2)
