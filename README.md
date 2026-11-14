@@ -1,6 +1,6 @@
 # Bitcoin_bot
 
-A Bitcoin trading bot with a high-performance **C++23** engine for market data and signal generation, and a **Python 3.12** application layer. <!-- TODO: add one sentence on what the Python side does (dashboard, backtesting, analysis, etc.) -->
+A Bitcoin trading bot with a high-performance **C++23** engine for market data and signal generation, and a **Python 3.12** broker that executes trades on Binance and tracks open and closed positions.
 
 ![Status](https://img.shields.io/badge/status-in%20development-orange)
 ![C++](https://img.shields.io/badge/C%2B%2B-23-blue)
@@ -13,7 +13,7 @@ A Bitcoin trading bot with a high-performance **C++23** engine for market data a
 
 ## Screenshots
 
-<!-- Replace the paths below with your own images in the docs/ folder -->
+<!-- Put your images in docs/images/ and update the file names if needed -->
 
 | Dashboard | Live signals |
 | --- | --- |
@@ -27,12 +27,12 @@ A Bitcoin trading bot with a high-performance **C++23** engine for market data a
 
 ## Features
 
-- Real-time price ingestion into a ring/price buffer (`PriceBuffer`)
+- Real-time price ingestion into a ring buffer (`PriceBuffer`)
 - SQLite persistence for candles and trades (`DbHandler`)
-- Strategy engine with pluggable signal generation
-- Paper trading strategy testing (for now)
-- Simple python CLI monitoring app
-- <!-- TODO: Python features (backtesting, plotting, monitoring) -->
+- Strategy engine with pluggable signal generation (`signalgen`)
+- Paper trading on the Binance test network for strategy testing
+- Python broker that executes orders on Binance and tracks positions
+- Simple Python CLI monitoring app
 
 ---
 
@@ -40,8 +40,8 @@ A Bitcoin trading bot with a high-performance **C++23** engine for market data a
 
 ```
 Bitcoin_bot/
-├── cpp_engine/     # C++23 engine: data handling, strategy, persistence
-├── python_app/     # Python 3.12 application layer
+├── cpp_engine/     # C++23 engine: data client, strategy, persistence
+├── python_app/     # Python 3.12 broker and CLI monitor
 ├── docs/           # Documentation and images
 ├── LICENSE         # Apache-2.0
 └── README.md
@@ -58,8 +58,8 @@ Bitcoin_bot/
 | SQLite3 | dev libraries (`libsqlite3-dev`) |
 | Python | 3.12 |
 | pip | latest |
-
-<!-- TODO: add any other dependencies (exchange API, TWS API, etc.) -->
+| Binance account | live API keys for real trading |
+| Binance testnet account | API keys for paper trading |
 
 ---
 
@@ -89,9 +89,10 @@ cmake -S . -B build
 cmake --build build
 ```
 
-Or compile quickly with g++:
+Or compile by hand with g++:
 
 ```bash
+cd cpp_engine/src
 g++ main.cpp client.cpp dbhandler.cpp pricebuffer.cpp signalgen.cpp -std=c++23 -pthread -lsqlite3 -o btc_engine
 ```
 
@@ -106,14 +107,17 @@ pip install -r requirements.txt
 
 ### 4. Configuration
 
-Create a `.env` or config file inside python_app folder with your settings:
+Create a `.env` file inside the `python_app` folder:
 
 ```env
-# TODO: replace with your real settings
 BINANCE_BASE_URL="https://api.binance.com"
-BINANCE_API_KEY= <live trading api linked to your actual account>
+
+# Live trading keys (linked to your real account)
+BINANCE_API_KEY=
 BINANCE_API_SECRET=
-BINANCE_API_KEY_P= <paper trading api given by binance test api>
+
+# Paper trading keys (from the Binance test network)
+BINANCE_API_KEY_P=
 BINANCE_API_KEY_SECRET_P=
 ```
 
@@ -123,34 +127,44 @@ BINANCE_API_KEY_SECRET_P=
 
 ## Usage
 
-Start the C++ engine:
+Start the Python broker first, then the C++ engine.
+
+**Terminal 1: Python broker**
+
+```bash
+cd python_app
+source venv/bin/activate
+python main.py
+```
+
+**Terminal 2: C++ engine**
+
+If you built with CMake:
 
 ```bash
 ./cpp_engine/build/bitcoin_bot
 ```
 
-Start the Python app:
+If you built by hand:
 
 ```bash
-python python_app/main.py   # TODO: confirm entry point
+./cpp_engine/src/btc_engine
 ```
 
 ---
 
 ## How It Works
 
-<!-- Add an architecture diagram in docs/images/architecture.png -->
-
 1. The engine receives price data and stores it in the `PriceBuffer`.
 2. Candles are persisted to SQLite through the `DbHandler`.
-3. The strategy reads the buffer and generates buy, sell or hold signals.
-4. The Python app <!-- TODO: describe what it does with the signals -->.
+3. The strategy reads the buffer, generates buy, sell or hold signals and sends them to the Python broker.
+4. The Python broker executes trades on Binance and tracks opening and closing positions.
 
 ---
 
 ## Roadmap
 
-- [ ] Paper trading mode
+- [x] Paper trading mode
 - [ ] Live order execution
 - [ ] More strategies and indicators
 - [ ] Backtesting reports
